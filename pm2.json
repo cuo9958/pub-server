@@ -1,0 +1,12 @@
+{
+    "apps": [{
+        "name": "pub_server",
+        "script": "app.js",
+        "args": [],
+        "env": {
+            "PORT": "18060",
+            "NODE_ENV": "development",
+            "SERVER_ENV": "dev"
+        }
+    }]
+}

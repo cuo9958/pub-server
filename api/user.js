@@ -49,7 +49,6 @@ router.post("/login", async function(ctx, next) {
             token: "123456abc",
             headimg: "http://resource.guofangchao.com/shequ/img_152816850788416.png"
         },
-        db: data
     };
 });
 

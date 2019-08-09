@@ -1,6 +1,4 @@
 const Router = require("koa-router");
-const axios = require("axios");
-const config = require("config");
 const router = new Router();
 
 const encoded = data => {
@@ -27,53 +25,32 @@ router.post("/login", async function(ctx, next) {
             msg: "登录账户或者密码为空"
         });
     }
-    const res = await axios("http://aaa.corp.daling.com/api/checklogin", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        data: encoded({
-            username: username,
-            password: pwd,
-            project: config.get("auth.group"),
-            expire: 86400
-        })
-    });
-    if (res.status !== 200) {
+    if (username != "admin" || pwd != "admin") {
         return (ctx.body = {
             status: 1,
-            msg: "网络连接失败"
+            msg: "账户和密码是admin"
         });
     }
-    const data = res.data;
-    console.log(data);
-    if (data.status == 0) {
-        ctx.cookies.set("username", username, {
-            expires: new Date(Date.now() + 86400000 * 2)
-        });
-        ctx.cookies.set("token", data.token, {
-            expires: new Date(Date.now() + 86400000 * 2)
-        });
-        ctx.cookies.set("nickname", encodeURIComponent(data.displayname), {
-            expires: new Date(Date.now() + 86400000 * 2)
-        });
+    ctx.cookies.set("username", "guest", {
+        expires: new Date(Date.now() + 86400000 * 2)
+    });
+    ctx.cookies.set("token", "123456abc", {
+        expires: new Date(Date.now() + 86400000 * 2)
+    });
+    ctx.cookies.set("nickname", encodeURIComponent("游客"), {
+        expires: new Date(Date.now() + 86400000 * 2)
+    });
 
-        ctx.body = {
-            status: 0,
-            data: {
-                username: username,
-                nickname: data.displayname,
-                token: data.token,
-                headimg: data.userphoto
-            },
-            db: data
-        };
-    } else {
-        ctx.body = {
-            status: 1,
-            msg: data.message
-        };
-    }
+    ctx.body = {
+        status: 0,
+        data: {
+            username: "guest",
+            nickname: "游客",
+            token: "123456abc",
+            headimg: "http://resource.guofangchao.com/shequ/img_152816850788416.png"
+        },
+        db: data
+    };
 });
 
 router.post("/auth", async function(ctx, next) {
@@ -85,38 +62,15 @@ router.post("/auth", async function(ctx, next) {
             msg: "登录账户或者密码为空"
         });
     }
-    const res = await axios("http://aaa.corp.daling.com/api/checkauth", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        data: encoded({
-            username: username,
-            token: token,
-            project: config.get("auth.group")
-        })
-    });
-    if (res.status !== 200) {
+    if (username != "admin" || pwd != "admin") {
         return (ctx.body = {
             status: 1,
-            msg: "网络连接失败"
+            msg: "账户和密码是admin"
         });
     }
-    const data = res.data;
-    console.log(data);
-    if (data.status == 0) {
-        ctx.body = {
-            status: 0,
-            data: {
-                nickname: data.displayname,
-                headimg: data.userphoto
-            }
-        };
-    } else {
-        ctx.body = {
-            status: 1,
-            msg: data.message
-        };
-    }
+    ctx.body = {
+        status: 0,
+        data: {}
+    };
 });
 exports.routers = router.routes();

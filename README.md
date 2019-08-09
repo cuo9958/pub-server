@@ -2,7 +2,7 @@
 
 后台服务发布数据通知到其他所有接口，同步更新最新的配置。
 
-> @dal/pub-service 插件是内部插件，可以搜索同级github目录下的 pub-service库
+> pub-service 插件是内部插件，可以搜索同级github目录下的 pub-service库
 
 ### 部署过程
 

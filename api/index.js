@@ -1,5 +1,5 @@
 const Router = require("koa-router");
-const Service = require("@dal/pub-service");
+const Service = require("pub-service");
 
 const router = new Router();
 

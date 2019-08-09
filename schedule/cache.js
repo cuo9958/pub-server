@@ -3,7 +3,7 @@
  */
 // const schedule = require("node-schedule");
 const bundle_cache = require("../caches/bundle");
-const Service = require("@dal/pub-service");
+const Service = require("pub-service");
 
 // schedule.scheduleJob("*/10 * * * * *", function() {
 //     bundle_cache.update();

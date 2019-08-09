@@ -2,7 +2,7 @@
  * bundle数据管理
  */
 const LRU = require("lru-cache");
-const Service = require("@dal/pub-service");
+const Service = require("pub-service");
 const JSON5 = require("json5");
 
 const MaxDate = 60000;

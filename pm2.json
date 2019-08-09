@@ -4,7 +4,7 @@
         "script": "app.js",
         "args": [],
         "env": {
-            "PORT": "18060",
+            "PORT": "8060",
             "NODE_ENV": "development",
             "SERVER_ENV": "dev"
         }

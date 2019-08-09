@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "pub-service": "0.1.18",
+    "pub-service": "0.1.19",
     "axios": "^0.19.0",
     "config": "^3.2.2",
     "json5": "^2.1.0",

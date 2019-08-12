@@ -3,6 +3,16 @@ const bundle_cache = require("../caches/bundle");
 
 const router = new Router();
 const azMap = new Map();
+azMap.set("0", 0);
+azMap.set("1", 1);
+azMap.set("2", 2);
+azMap.set("3", 3);
+azMap.set("4", 4);
+azMap.set("5", 5);
+azMap.set("6", 6);
+azMap.set("7", 7);
+azMap.set("8", 8);
+azMap.set("9", 9);
 azMap.set("a", 1);
 azMap.set("b", 2);
 azMap.set("c", 3);
@@ -36,18 +46,28 @@ azMap.set("z", 6);
  * 2.不是数字，不返回内容
  * 3.字母转成数字
  */
-function checkPrece(model, clientid) {
+function checkPrece(model, clientid, platform) {
     const perce = model.perce;
     if (perce === 100) return model;
     if (!clientid) return model;
     let checkStr = clientid.substr(clientid.length - 2).toLowerCase();
-    checkStr = checkStr.replace(/[a-z]/g, function(v) {
-        return azMap.get(v);
-    });
-    checkStr = checkStr * 1;
-    console.log(checkStr, clientid);
-    if (isNaN(checkStr)) return null;
-    if (perce < checkStr) return null;
+    if (checkStr.length < 2) return model;
+    try {
+        if (platform === "ios" || /[a-z]/.test(checkStr)) {
+            const va = azMap.get(checkStr[0]);
+            const vb = azMap.get(checkStr[1]);
+            checkStr = va + vb + "";
+            if (checkStr.length > 2)
+                checkStr = clientid.substr(clientid.length - 2);
+        }
+        checkStr = checkStr * 1;
+        console.log(checkStr, clientid);
+        if (isNaN(checkStr)) return null;
+        if (perce < checkStr) return null;
+    } catch (error) {
+        console.log(error);
+    }
+
     return model;
 }
 /**
@@ -81,11 +101,13 @@ router.all("/", async function(ctx, next) {
         if (platform === "ios") active = list.glist;
         if (platform === "android")
             active = list.glist.filter(item => item.brand.includes(brand));
-        if (active.length > 0) active = checkPrece(active[0], clientid);
+        if (active.length > 0)
+            active = checkPrece(active[0], clientid, platform);
         //兼容没有品牌的灰度情况
         if (active.length === 0) {
             active = list.glist.filter(item => item.brand.length === 0);
-            if (active.length > 0) active = checkPrece(active[0], clientid);
+            if (active.length > 0)
+                active = checkPrece(active[0], clientid, platform);
         }
     }
     if (!active || active.length === 0) {
